@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gerenciador de Estudos — PMESP & Capatazia</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body data-theme="light">
+    <!-- Novo layout com sidebar lateral -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <img src="foto.jpg" alt="Foto de perfil" class="profile-photo">
+                    <div class="user-info">
+                        <h2 class="user-name">Gustavo Dias </h2>
+                        <h4 class="user-title">Estudante de Concursos 🔥</h4>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle" title="Recolher menu">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#cronograma" class="nav-item" data-section="cronograma">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Cronograma</span>
+                </a>
+                <a href="#estatisticas" class="nav-item" data-section="estatisticas">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Estatísticas</span>
+                </a>
+                <a href="#conquistas" class="nav-item" data-section="conquistas">
+                    <i class="bi bi-trophy"></i>
+                    <span>Conquistas</span>
+                </a>
+                <a href="#conteudo" class="nav-item" data-section="conteudo">
+                    <i class="bi bi-list-check"></i>
+                    <span>Conteúdo</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="concurso-selector">
+                    <label><i class="bi bi-mortarboard"></i> Concurso:</label>
+                    <select id="selectConcurso">
+                        <option value="pmesp">PMESP (29/11)</option>
+                        <option value="capatazia">Capatazia (13/12)</option>
+                        <option value="combinado">Modo Combinado</option>
+                    </select>
+                </div>
+                <button id="toggleTheme" class="theme-toggle">
+                    <i class="bi bi-moon"></i>
+                    <span>Tema Escuro</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="header-title">
+                    <h1>Gerenciador de Estudos</h1>
+                    <p class="subtitle">Prepare-se para seus concursos com organização e foco</p>
+                </div>
+                <div class="header-actions">
+                    <input id="search" class="search-input" placeholder="Buscar tópico..." />
+                    <button id="openPomodoro" class="icon-btn" title="Timer Pomodoro">
+                        <i class="bi bi-clock-history"></i>
+                    </button>
+                    <button id="exportCsv" class="icon-btn" title="Exportar CSV">
+                        <i class="bi bi-download"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="section-header">
+                        <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+                        <div class="countdown-chips">
+                            <div class="chip" id="pmespCountdown">
+                                <i class="bi bi-alarm"></i> PM: <strong>-- dias</strong>
+                            </div>
+                            <div class="chip" id="capataziaCountdown">
+                                <i class="bi bi-alarm"></i> Capatazia: <strong>-- dias</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalHours">0h</div>
+                                <div class="stat-label">Horas Estudadas</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card success">
+                            <div class="stat-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="completionRate">0%</div>
+                                <div class="stat-label">Conclusão Total</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card warning">
+                            <div class="stat-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="todayProgress">0/0</div>
+                                <div class="stat-label">Progresso Hoje</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card info">
+                            <div class="stat-icon">
+                                <i class="bi bi-fire"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="streakValue">0</div>
+                                <div class="stat-label">Dias de Sequência</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card danger">
+                            <div class="stat-icon">
+                                <i class="bi bi-hourglass-split"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statTimeLeft">0h</div>
+                                <div class="stat-label">Tempo Restante</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card purple">
+                            <div class="stat-icon">
+                                <i class="bi bi-speedometer2"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="avgDaily">0%</div>
+                                <div class="stat-label">Média Diária</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <h3><i class="bi bi-bar-chart"></i> Progresso Semanal</h3>
+                            <div class="progress-chart" id="progressChart"></div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3><i class="bi bi-calendar2-week"></i> Calendário de Estudo</h3>
+                            <div class="study-calendar" id="studyCalendar"></div>
+                            <div class="calendar-legend">
+                                <span><span class="cal-dot none"></span> 0%</span>
+                                <span><span class="cal-dot low"></span> 1-25%</span>
+                                <span><span class="cal-dot medium"></span> 26-75%</span>
+                                <span><span class="cal-dot high"></span> 76-99%</span>
+                                <span><span class="cal-dot complete"></span> 100%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="tips-card">
+                        <h3><i class="bi bi-lightbulb"></i> Dicas de Estudo</h3>
+                        <div class="tips-grid">
+                            <div class="tip-item">
+                                <i class="bi bi-clock"></i>
+                                <div>
+                                    <strong>Técnica Pomodoro</strong>
+                                    <p>25min foco + 5min pausa. Use o timer integrado!</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-trophy"></i>
+                                <div>
+                                    <strong>Mantenha a Sequência</strong>
+                                    <p>Estude todos os dias para manter seu streak ativo.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-journal-text"></i>
+                                <div>
+                                    <strong>Faça Anotações</strong>
+                                    <p>Marque dificuldades e adicione notas em cada tópico.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-calendar-week"></i>
+                                <div>
+                                    <strong>Estude 7 Dias</strong>
+                                    <p>Agora com domingo incluído para maximizar seu tempo!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cronograma Section -->
+                <section id="cronograma" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-calendar3"></i> Cronograma Semanal</h2>
+                        <div class="section-actions">
+                            <button id="focusMode" class="btn-secondary">
+                                <i class="bi bi-eye"></i> Modo Foco
+                            </button>
+                            <button id="resetAll" class="btn-danger">
+                                <i class="bi bi-trash"></i> Resetar
+                            </button>
+                        </div>
+                    </div>
+
+                    <nav class="week-tabs" id="weeks"></nav>
+                    <div id="weekContent"></div>
+
+                    <div class="week-controls">
+                        <button id="markWeek" class="btn-primary">
+                            <i class="bi bi-check2-circle"></i> Marcar Semana Completa
+                        </button>
+                        <button id="clearWeek" class="btn-secondary">
+                            <i class="bi bi-x-circle"></i> Limpar Semana
+                        </button>
+                    </div>
+
+                    <div class="progress-card">
+                        <h3><i class="bi bi-pie-chart"></i> Progresso da Semana</h3>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressBar"></div>
+                            </div>
+                            <div id="progressText" class="progress-text">0/0 blocos (0%)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Estatísticas Section -->
+                <section id="estatisticas" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-graph-up"></i> Estatísticas Detalhadas</h2>
+                    </div>
+
+                    <div class="stats-detail-grid">
+                        <div class="detail-card">
+                            <h4><i class="bi bi-clipboard-data"></i> Resumo Geral</h4>
+                            <div class="detail-stats">
+                                <div class="detail-row">
+                                    <span>Total de blocos:</span>
+                                    <strong id="statTotal">0</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Concluídos:</span>
+                                    <strong id="statDone">0</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Restantes:</span>
+                                    <strong id="statRemaining">0</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Previsão de término:</span>
+                                    <strong id="statFinishDate">--</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-card">
+                            <h4><i class="bi bi-exclamation-triangle"></i> Tópicos Prioritários</h4>
+                            <div id="priorityTopics" class="priority-list">
+                                <p class="empty-state">Tópicos marcados como difíceis aparecerão aqui.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="overall" class="overall-status"></div>
+                </section>
+
+                <!-- Conquistas Section -->
+                <section id="conquistas" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-trophy"></i> Suas Conquistas</h2>
+                    </div>
+
+                    <div class="achievements-grid" id="achievements">
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <h4>Primeira Semana</h4>
+                            <p>Complete sua primeira semana de estudos</p>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="bi bi-fire"></i>
+                            </div>
+                            <h4>7 Dias Seguidos</h4>
+                            <p>Mantenha uma sequência de 7 dias</p>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="bi bi-lightning-fill"></i>
+                            </div>
+                            <h4>Metade do Caminho</h4>
+                            <p>Alcance 50% de conclusão</p>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="bi bi-gem"></i>
+                            </div>
+                            <h4>Mestre dos Estudos</h4>
+                            <p>Complete 100% do cronograma</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Conteúdo Section -->
+                <section id="conteudo" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-list-check"></i> Conteúdo Programático</h2>
+                    </div>
+
+                    <div class="content-card">
+                        <button id="toggleAllReminders" class="btn-secondary">
+                            <i class="bi bi-eye"></i> Ver Conteúdo Completo
+                        </button>
+                        <pre id="programSummary" class="program-content"></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Pomodoro Flutuante -->
+    <div id="pomodoroFloat" class="pomodoro-float hidden">
+        <div class="pomodoro-header">
+            <h4><i class="bi bi-clock-history"></i> Timer Pomodoro</h4>
+            <button id="closePomo" class="icon-btn"><i class="bi bi-x"></i></button>
+        </div>
+        <div class="pomodoro-display">
+            <div id="pomoTime" class="pomo-time">25:00</div>
+            <div id="pomoLabel" class="pomo-label">Foco</div>
+        </div>
+        <div class="pomodoro-controls">
+            <button id="pomoStart" class="pomo-btn"><i class="bi bi-play-fill"></i></button>
+            <button id="pomoPause" class="pomo-btn hidden"><i class="bi bi-pause-fill"></i></button>
+            <button id="pomoReset" class="pomo-btn"><i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+        <div class="pomo-cycles">
+            <span id="pomoCycles">Ciclos: 0</span>
+        </div>
+    </div>
+
+    <!-- Modal de Notas -->
+    <div id="notesModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="bi bi-journal-text"></i> Notas de Estudo</h3>
+                <button id="closeNotes" class="icon-btn"><i class="bi bi-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <h4 id="notesTopicTitle"></h4>
+                <textarea id="notesTextarea" placeholder="Escreva suas anotações, dúvidas ou observações..."></textarea>
+                <div class="difficulty-selector">
+                    <label>Dificuldade:</label>
+                    <button class="diff-btn" data-diff="facil"><i class="bi bi-emoji-smile"></i> Fácil</button>
+                    <button class="diff-btn" data-diff="medio"><i class="bi bi-emoji-neutral"></i> Médio</button>
+                    <button class="diff-btn" data-diff="dificil"><i class="bi bi-emoji-frown"></i> Difícil</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveNotes" class="btn-primary"><i class="bi bi-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
