@@ -1005,117 +1005,141 @@ document.getElementById("notesModal").addEventListener("click", (e) => {
 // INITIALIZATION
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
-  const saved = localStorage.getItem("theme") || "light"
-  document.body.setAttribute("data-theme", saved)
-  const icon = document.querySelector("#toggleTheme i")
-  icon.className = saved === "dark" ? "bi bi-sun" : "bi bi-moon"
+  const saved = localStorage.getItem("theme") || "light";
+  document.body.setAttribute("data-theme", saved);
+  const icon = document.querySelector("#toggleTheme i");
+  icon.className = saved === "dark" ? "bi bi-sun" : "bi bi-moon";
 
   // Sidebar navigation
-  const navItems = document.querySelectorAll(".nav-item")
-  const sections = document.querySelectorAll(".content-section")
+  const navItems = document.querySelectorAll(".nav-item");
+  const sections = document.querySelectorAll(".content-section");
 
   navItems.forEach((item) => {
     item.addEventListener("click", (e) => {
-      e.preventDefault()
-      const targetSection = item.dataset.section
+      e.preventDefault();
+      const targetSection = item.dataset.section;
 
-      navItems.forEach((nav) => nav.classList.remove("active"))
-      item.classList.add("active")
+      navItems.forEach((nav) => nav.classList.remove("active"));
+      item.classList.add("active");
 
-      sections.forEach((section) => section.classList.remove("active"))
-      document.getElementById(targetSection).classList.add("active")
-    })
-  })
+      sections.forEach((section) => section.classList.remove("active"));
+      document.getElementById(targetSection).classList.add("active");
 
-  const sidebarToggle = document.getElementById("sidebarToggle")
-  const sidebar = document.querySelector(".sidebar")
+      // Fechar menu automaticamente em dispositivos móveis
+      if (window.innerWidth <= 1024) {
+        document.querySelector(".sidebar").classList.remove("active");
+      }
+    });
+  });
 
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed")
-    localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"))
-  })
+  const sidebar = document.querySelector(".sidebar");
+  const menuToggle = document.getElementById("menuToggle");
 
-  // Restaurar estado da sidebar
-  const sidebarCollapsed = localStorage.getItem("sidebarCollapsed") === "true"
+  // === MENU MOBILE ===
+  menuToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    sidebar.classList.toggle("active");
+  });
+
+  // Fecha o menu se clicar fora
+  document.addEventListener("click", (e) => {
+    if (
+      window.innerWidth <= 1024 &&
+      !sidebar.contains(e.target) &&
+      !menuToggle.contains(e.target)
+    ) {
+      sidebar.classList.remove("active");
+    }
+  });
+
+  // Restaurar estado do tema
+  const sidebarCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
   if (sidebarCollapsed) {
-    sidebar.classList.add("collapsed")
+    sidebar.classList.add("collapsed");
   }
 
-  // Mobile menu toggle
-  const menuToggle = document.getElementById("menuToggle")
+  setConcurso("pmesp"); // default
+  updateCountdowns();
+  setInterval(updateCountdowns, 60000);
 
-  menuToggle.addEventListener("click", () => {
-    sidebar.classList.add("open")
-  })
-
-  document.addEventListener("click", (e) => {
-    if (window.innerWidth <= 1024) {
-      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && sidebar.classList.contains("open")) {
-        sidebar.classList.remove("open")
-      }
-    }
-  })
-
-  setConcurso("pmesp") // default
-  updateCountdowns()
-  setInterval(updateCountdowns, 60000) // Update every minute
-
-  document.getElementById("programSummary").textContent = buildProgramSummary()
-})
+  document.getElementById("programSummary").textContent = buildProgramSummary();
+});
 
 // ============================
 // CONTROLES GERAIS - Modo Foco
 // ============================
-let focusModeActive = false
+let focusModeActive = false;
 
 document.getElementById("focusMode").addEventListener("click", () => {
-  focusModeActive = !focusModeActive
-  const btn = document.getElementById("focusMode")
-  const appContainer = document.querySelector(".app-container")
+  focusModeActive = !focusModeActive;
+  const btn = document.getElementById("focusMode");
+  const appContainer = document.querySelector(".app-container");
 
   if (focusModeActive) {
-    appContainer.classList.add("focus-mode")
-    btn.innerHTML = '<i class="bi bi-eye-slash"></i> Sair do Foco'
-    btn.classList.add("active")
+    appContainer.classList.add("focus-mode");
+    btn.innerHTML = '<i class="bi bi-eye-slash"></i> Sair do Foco';
+    btn.classList.add("active");
 
-    // Esconder sidebar
-    document.querySelector(".sidebar").classList.add("focus-hidden")
+    document.querySelector(".sidebar").classList.add("focus-hidden");
+    document.querySelector(".header-actions").classList.add("focus-hidden");
+    document.querySelector(".section-actions").classList.add("focus-hidden");
 
-    // Esconder header actions
-    document.querySelector(".header-actions").classList.add("focus-hidden")
-
-    // Esconder section header actions
-    document.querySelector(".section-actions").classList.add("focus-hidden")
-
-    // Mostrar apenas o cronograma
     document.querySelectorAll(".content-section").forEach((section) => {
       if (section.id !== "cronograma") {
-        section.style.display = "none"
+        section.style.display = "none";
       }
-    })
+    });
 
-    alert("Modo Foco ativado! Apenas o cronograma está visível para máxima concentração.")
+    alert("Modo Foco ativado! Apenas o cronograma está visível.");
   } else {
-    appContainer.classList.remove("focus-mode")
-    btn.innerHTML = '<i class="bi bi-eye"></i> Modo Foco'
-    btn.classList.remove("active")
+    appContainer.classList.remove("focus-mode");
+    btn.innerHTML = '<i class="bi bi-eye"></i> Modo Foco';
+    btn.classList.remove("active");
 
-    // Mostrar sidebar
-    document.querySelector(".sidebar").classList.remove("focus-hidden")
+    document.querySelector(".sidebar").classList.remove("focus-hidden");
+    document.querySelector(".header-actions").classList.remove("focus-hidden");
+    document.querySelector(".section-actions").classList.remove("focus-hidden");
 
-    // Mostrar header actions
-    document.querySelector(".header-actions").classList.remove("focus-hidden")
-
-    // Mostrar section header actions
-    document.querySelector(".section-actions").classList.remove("focus-hidden")
-
-    // Restaurar navegação normal
-    const activeNav = document.querySelector(".nav-item.active")
+    const activeNav = document.querySelector(".nav-item.active");
     if (activeNav) {
-      const targetSection = activeNav.dataset.section
+      const targetSection = activeNav.dataset.section;
       document.querySelectorAll(".content-section").forEach((section) => {
-        section.style.display = section.id === targetSection ? "block" : "none"
-      })
+        section.style.display =
+          section.id === targetSection ? "block" : "none";
+      });
     }
   }
-})
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const selectConcurso = document.getElementById('selectConcurso');
+  const quizContainer = document.getElementById('quizContainer');
+
+  function carregarSimulado(concurso) {
+    let link = '';
+
+    switch (concurso) {
+      case 'pmesp':
+        link = 'https://gustavodiasdeoliveira.github.io/Quiz-PM-SP-2025/';
+        break;
+      case 'capatazia':
+        link = 'https://seu-link-aqui.com/simulado_capatazia.html';
+        break;
+      case 'combinado':
+        link = 'https://seu-link-aqui.com/simulado_combinado.html';
+        break;
+      default:
+        quizContainer.innerHTML = `<p>Selecione um concurso no rodapé para visualizar o simulado correspondente.</p>`;
+        return;
+    }
+
+    quizContainer.innerHTML = `
+      <iframe src="${link}" class="quiz-frame" frameborder="0" allowfullscreen></iframe>
+    `;
+  }
+
+  selectConcurso.addEventListener('change', e => carregarSimulado(e.target.value));
+
+  // Carrega o simulado certo ao abrir a página
+  carregarSimulado(selectConcurso.value);
+});

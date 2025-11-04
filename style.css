@@ -1418,160 +1418,147 @@ button {
   margin-left: 0;
 }
 
-@media (max-width: 1200px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* ===== Área principal do simulado ===== */
+.quiz-area {
+  width: 100%;
+  height: calc(100vh - 120px); /* usa quase toda a altura da tela, descontando header/rodapé */
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.quiz-area p {
+  color: var(--text-secondary, #666);
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* ===== IFRAME (onde o quiz aparece) ===== */
+.quiz-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0; /* sem bordas arredondadas, ocupa tudo */
+  background: #fff;
+  box-shadow: none;
+}
+
+/* ===== Modo Mobile ===== */
+@media (max-width: 768px) {
+  .quiz-area {
+    height: calc(100vh - 100px); /* ajusta para telas menores */
   }
-  .charts-row {
-    grid-template-columns: 1fr;
+
+  .quiz-frame {
+    border-radius: 0;
   }
 }
 
+
+/* ========== RESPONSIVIDADE MOBILE ========== */
 @media (max-width: 1024px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-  .sidebar.open {
-    transform: translateX(0);
-  }
   .main-content {
     margin-left: 0;
   }
+
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    width: 260px;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
   .menu-toggle {
     display: block;
   }
+
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .content-wrapper {
+    padding: 20px;
+  }
+
+  .stats-grid,
+  .charts-row,
+  .tips-grid,
+  .stats-detail-grid,
   .day-grid {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 768px) {
-  .top-header {
-    padding: 14px;
-    flex-wrap: wrap;
-  }
-  .header-title h1 {
-    font-size: 20px;
-  }
-  .subtitle {
-    font-size: 12px;
-  }
-  .header-actions {
-    width: 100%;
-    margin-top: 10px;
-  }
-  .search-input {
-    flex: 1;
-    width: auto;
-  }
-  .content-wrapper {
-    padding: 18px 14px;
-  }
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
   .section-header h2 {
     font-size: 22px;
   }
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-  .stat-card {
-    padding: 18px;
-  }
-  .stat-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
-  }
+
   .stat-value {
     font-size: 26px;
   }
-  .tips-grid {
-    grid-template-columns: 1fr;
+
+  .top-header {
+    padding: 16px;
+    flex-wrap: wrap;
   }
-  .week-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 8px;
+
+  .header-title h1 {
+    font-size: 20px;
   }
-  .week-btn {
-    flex-shrink: 0;
-  }
-  .achievements-grid {
-    grid-template-columns: 1fr;
-  }
-  .pomodoro-float {
-    width: calc(100% - 28px);
-    left: 14px;
-    right: 14px;
-  }
-  .modal-content {
-    width: 95%;
-  }
-  .block {
-    padding: 12px;
-  }
-  .block time {
-    font-size: 12px;
-  }
-  .block label {
+
+  .header-title p {
     font-size: 13px;
+  }
+
+  .week-controls button {
+    min-width: 140px;
   }
 }
 
-@media (max-width: 480px) {
-  .header-title h1 {
+@media (max-width: 600px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .profile-photo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+
+  .section-header h2 {
     font-size: 18px;
   }
-  .section-header h2 {
-    font-size: 20px;
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
   }
-  .stat-value {
-    font-size: 24px;
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
   }
-  .stat-label {
-    font-size: 12px;
-  }
-  .chart-card {
-    padding: 18px;
-  }
-  .progress-chart {
-    height: 180px;
-  }
-  .study-calendar {
-    gap: 4px;
-  }
-  .cal-day {
-    font-size: 11px;
-  }
-  .day-grid {
+
+  .charts-row {
     grid-template-columns: 1fr;
   }
-  .day {
-    padding: 16px;
-  }
+
   .day h3 {
     font-size: 16px;
   }
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
 }
